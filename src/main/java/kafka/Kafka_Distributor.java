@@ -17,8 +17,6 @@ import org.opencv.highgui.VideoCapture;
 import org.opencv.highgui.Highgui;
 
 
-
-
 public class Kafka_Distributor implements Runnable {
 
 	private String Broker_URI;
@@ -32,7 +30,7 @@ public class Kafka_Distributor implements Runnable {
 	public Kafka_Distributor() {
 
 		Broker_URI = "163.152.174.73:9092";
-		Kafka_Topic = "test01";
+		Kafka_Topic = "supercom";
 //		cameraUrl = "2";
 		count =0;
 	}
@@ -103,7 +101,7 @@ public class Kafka_Distributor implements Runnable {
             a = producer.send(producerRecord);
                            
 	          count++;
-      //      System.out.println("Send one frame");  
+            System.out.println("Send one frame");  
 
                       
 			try {
