@@ -1,21 +1,20 @@
 package kafka;
 
-import camera.*;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-import java.util.Random;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.kafka.clients.producer.*;  
-import org.apache.kafka.common.*;
-
-
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.opencv.core.Core;
-import org.opencv.core.Size;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
 import org.opencv.highgui.VideoCapture;
-import org.opencv.highgui.Highgui;
+
+import kafka.producer.Partitioner;
+import kafka.utils.VerifiableProperties;
 
 
 public class Kafka_Distributor implements Runnable {
@@ -70,6 +69,8 @@ public class Kafka_Distributor implements Runnable {
 		
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
+		props.put("partitioner.class", RoundRobinPartitioner.class.getName());
+		
 		// props.put("serializer.class", "kafka.serializer.StringEncoder");
 		
 			  
@@ -126,4 +127,29 @@ public class Kafka_Distributor implements Runnable {
 		producerProcess.start();
 	}
 
+	
+	
+	
+	public static class RoundRobinPartitioner implements Partitioner {
+		private AtomicInteger n = new AtomicInteger(0);
+		public RoundRobinPartitioner(VerifiableProperties props) {
+		}
+		
+	
+		public int partition(Object key, int numPartitions) {
+		int i = n.getAndIncrement();
+		if (i == Integer.MAX_VALUE) {
+		n.set(0);
+		return 0;
+		}
+		return i % numPartitions;
+		}
+		}
+
+
+		
+	
+	
+	
+	
 }
