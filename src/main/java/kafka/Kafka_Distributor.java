@@ -9,6 +9,7 @@ import java.util.concurrent.Future;
 import org.apache.kafka.clients.producer.*;  
 import org.apache.kafka.common.*;
 
+
 import org.opencv.core.Core;
 import org.opencv.core.Size;
 import org.opencv.core.Mat;
@@ -65,7 +66,7 @@ public class Kafka_Distributor implements Runnable {
 		props.put("bootstrap.servers", Broker_URI);
 	//	props.put("metadata.broker.list", Broker_URI);
 		props.put("acks", "all");
-		props.put("client.id", "super-group");
+		props.put("client.id", "vardin-group");
 		
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer", "org.apache.kafka.common.serialization.ByteArraySerializer");
